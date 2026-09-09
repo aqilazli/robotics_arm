@@ -1,0 +1,47 @@
+# Planning-time velocity/acceleration limits. Position limits are already
+# read from urdf/robot_arm.urdf directly -- only velocity/acceleration
+# scaling for the planner goes here. Matches the URDF's velocity="3" (rad/s)
+# on every joint; acceleration isn't specified in the URDF so a
+# conservative default is used.
+joint_limits:
+  joint_L1:
+    has_velocity_limits: true
+    max_velocity: 3.0
+    has_acceleration_limits: true
+    max_acceleration: 2.0
+  joint_L2:
+    has_velocity_limits: true
+    max_velocity: 3.0
+    has_acceleration_limits: true
+    max_acceleration: 2.0
+  joint_L3:
+    has_velocity_limits: true
+    max_velocity: 3.0
+    has_acceleration_limits: true
+    max_acceleration: 2.0
+  joint_L4:
+    has_velocity_limits: true
+    max_velocity: 3.0
+    has_acceleration_limits: true
+    max_acceleration: 2.0
+  joint_L5:
+    has_velocity_limits: true
+    max_velocity: 3.0
+    has_acceleration_limits: true
+    max_acceleration: 2.0
+  joint_L6:
+    has_velocity_limits: true
+    max_velocity: 3.0
+    has_acceleration_limits: true
+    max_acceleration: 2.0
+  # Prismatic: metres per second, not radians per second.
+  joint_L7_R:
+    has_velocity_limits: true
+    max_velocity: 0.5
+    has_acceleration_limits: true
+    max_acceleration: 1.0
+  joint_L7_L:
+    has_velocity_limits: true
+    max_velocity: 0.5
+    has_acceleration_limits: true
+    max_acceleration: 1.0

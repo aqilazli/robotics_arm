@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  robot_arm.srdf: hand-authored (no Setup Assistant available in this
+  environment). Matches the exact chain and joint names in
+  urdf/robot_arm.urdf: world to base_link to L1 to L2 to L3 to L4 to L5 to L6,
+  joints joint_L1..joint_L7, controller "robot_arm_controller" (see
+  config/ros2_controllers.yaml in the robot_arm package).
+-->
+<robot name="robot_arm">
+
+  <!-- "arm" = the 6 arm joints. L1-L4 drive position, L5 is neutral, and
+       L6 is the wrist roll, which the vision pipeline now drives from hand
+       orientation. Tip link is L6; the gripper (L7) is its own group,
+       matching how motion_mapping.py and ik_solver.py treat them as two
+       separate concerns in the live control code. -->
+  <group name="arm">
+    <chain base_link="base_link" tip_link="L6"/>
+  </group>
+
+  <!-- "gripper" = joint_L7 alone, the prismatic finger, no IK needed. -->
+  <group name="gripper">
+    <joint name="joint_L7_R"/>
+    <joint name="joint_L7_L"/>
+  </group>
+
+  <end_effector name="gripper" parent_link="L6" group="gripper"/>
+
+  <!-- Named state for quick testing from RViz's MotionPlanning panel -->
+  <group_state name="home" group="arm">
+    <joint name="joint_L1" value="0"/>
+    <joint name="joint_L2" value="0"/>
+    <joint name="joint_L3" value="0"/>
+    <joint name="joint_L4" value="0"/>
+    <joint name="joint_L5" value="0"/>
+    <joint name="joint_L6" value="0"/>
+  </group_state>
+
+  <!-- Open/close states for the gripper group, values match the exact
+       mapping the live vision pipeline uses (motion_mapping.py's
+       _L7_gripper() / hand_openness(): joint_L7 = lo + openness*(hi-lo)
+       over JOINT_LIMITS['joint_L7'] = (0.00, 0.011) METRES of jaw
+       travel, not radians). openness=0 (fist) means closed, openness=1
+       (flat hand) means open, so a MoveIt-commanded "open"/"close" means
+       the same physical gripper state as a hand gesture would. -->
+  <group_state name="open" group="gripper">
+    <joint name="joint_L7_R" value="0.011"/>
+    <joint name="joint_L7_L" value="0.011"/>
+  </group_state>
+  <group_state name="close" group="gripper">
+    <joint name="joint_L7_R" value="0.0"/>
+    <joint name="joint_L7_L" value="0.0"/>
+  </group_state>
+
+  <!-- Virtual joint fixing the robot to the world frame, matches
+       urdf/robot_arm.urdf's own fixed base_joint (world to base_link). -->
+  <virtual_joint name="world_joint" type="fixed" parent_frame="world" child_link="base_link"/>
+
+  <!-- Adjacent links in the chain are allowed to touch (mesh collision
+       geometry between consecutive links overlaps slightly at the joint,
+       same as any real robot; without this MoveIt reports a false
+       self-collision at every joint on startup). -->
+  <disable_collisions link1="base_link" link2="L1" reason="Adjacent"/>
+  <disable_collisions link1="L1" link2="L2" reason="Adjacent"/>
+  <disable_collisions link1="L2" link2="L3" reason="Adjacent"/>
+  <disable_collisions link1="L3" link2="L4" reason="Adjacent"/>
+  <disable_collisions link1="L4" link2="L5" reason="Adjacent"/>
+  <disable_collisions link1="L5" link2="L6" reason="Adjacent"/>
+  <disable_collisions link1="L6" link2="L7_R" reason="Adjacent"/>
+  <disable_collisions link1="L6" link2="L7_L" reason="Adjacent"/>
+  <disable_collisions link1="L7_R" link2="L7_L" reason="Never"/>
+
+</robot>

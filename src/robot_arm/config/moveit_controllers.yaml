@@ -1,0 +1,27 @@
+# Tells MoveIt to execute planned trajectories through the SAME controller
+# robot_node.py already drives for vision teleoperation
+# (config/ros2_controllers.yaml in the robot_arm package,
+# "robot_arm_controller" -- a joint_trajectory_controller, which exposes a
+# FollowJointTrajectory action server by default). MoveIt and the vision
+# pipeline are two different ways of commanding the identical controller --
+# not two separate robots -- so don't run both at once, they'll fight over
+# who's sending trajectories.
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - robot_arm_controller
+
+  robot_arm_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - joint_L1
+      - joint_L2
+      - joint_L3
+      - joint_L4
+      - joint_L5
+      - joint_L6
+      - joint_L7_R
+      - joint_L7_L

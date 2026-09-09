@@ -1,0 +1,10 @@
+# Starting joint values for standalone demo mode (fake hardware, no Gazebo).
+initial_positions:
+  joint_L1: 0.0
+  joint_L2: 0.0
+  joint_L3: 0.0
+  joint_L4: 0.0
+  joint_L5: 0.0
+  joint_L6: 0.0
+  joint_L7_R: 0.011
+  joint_L7_L: 0.011

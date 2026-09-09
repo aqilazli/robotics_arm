@@ -1,0 +1,7 @@
+# Minimal controller_manager config passed to the Ignition plugin.
+# Only sets the update rate — controller types are NOT declared here so
+# the plugin does NOT auto-load them.  The spawners in gazebo.launch.py
+# own loading / configuring / activating controllers.
+controller_manager:
+  ros__parameters:
+    update_rate: 100

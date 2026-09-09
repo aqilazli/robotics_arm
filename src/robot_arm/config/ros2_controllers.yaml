@@ -1,0 +1,45 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    robot_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+# No explicit joints/interfaces list. Naming both puts the broadcaster into a
+# custom-mapping mode and it logs "Mapping from 'position' to interface
+# 'position' will not be done, because 'position' is defined in 'interface'
+# parameter" -- after which /joint_states disagreed with the controller's own
+# feedback (controller: joint_L7_R actual=0.011; /joint_states: 0.0000 at the
+# same instant). Left to itself the broadcaster publishes every state
+# interface the hardware declares, which is exactly position and velocity
+# here, so the original worry about it claiming a non-existent 'effort'
+# interface does not arise.
+joint_state_broadcaster:
+  ros__parameters: {}
+
+robot_arm_controller:
+  ros__parameters:
+    joints:
+      - joint_L1
+      - joint_L2
+      - joint_L3
+      - joint_L4
+      - joint_L5
+      - joint_L6
+      - joint_L7_R
+      - joint_L7_L
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    open_loop_control: true
+    # true, not false: MoveIt plans per PLANNING GROUP, so the "arm" group
+    # sends 6 joints and "gripper" sends 2, while this controller owns all 8.
+    # With partial goals disallowed the controller rejected every one of them
+    # and Execute failed in RViz every time. The vision pipeline is
+    # unaffected either way -- robot_node always sends all 8.
+    allow_partial_joints_goal: true
