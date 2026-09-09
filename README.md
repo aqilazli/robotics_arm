@@ -1,8 +1,5 @@
 # Real-Time Hand Tracking and Latency Optimization in Vision-Arm Teleoperation
 
-WQF7023 (AI Research Project) — Universiti Malaya
-Muhammad Aqil Bin Azli, supervised by Dr Zati Hakim Azizul Hasan
-
 A vision-based robot-arm teleoperation system that predicts the operator's
 next hand/arm state to compensate for capture-to-actuation latency, and
 reconstructs 3D depth from the robot's own kinematics instead of relying on
