@@ -4,7 +4,7 @@ A vision-based robot-arm teleoperation system that predicts the operator's
 next hand/arm state to compensate for capture-to-actuation latency, and
 reconstructs 3D depth from the robot's own kinematics instead of relying on
 a single camera's native depth estimate. Built on ROS2 and simulated in
-Gazebo against a PAROL6-style 6-DOF arm.
+Gazebo against a robotics arm.
 
 ## Pipeline
 
